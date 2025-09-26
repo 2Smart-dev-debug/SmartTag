@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartTaggers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', Arial, sans-serif;
+      color: #f1f1f1;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background: linear-gradient(to bottom, #1e0055, #000022);
+    }
+
+    header {
+      text-align: center;
+      padding: 5rem 2rem;
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(to bottom, #1e0055 0%, #000022 100%);
+    }
+
+    header h1 {
+      font-size: 4rem;
+      color: #8a2be2;
+      text-shadow: 0 0 20px #8a2be2, 0 0 40px #00f0ff;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    header p {
+      font-size: 1.5rem;
+      margin: 1.5rem 0;
+      color: #00f0ff;
+    }
+
+    .cta-btn, .tab-btn {
+      display: inline-block;
+      margin: 1rem 0.5rem 0;
+      padding: 1rem 3rem;
+      background: linear-gradient(45deg, #8a2be2, #4b0082);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 1.4rem;
+      box-shadow: 0 0 20px #8a2be2;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .cta-btn:hover, .tab-btn:hover {
+      background: #00f0ff;
+      color: black;
+      box-shadow: 0 0 30px #00f0ff, 0 0 60px #8a2be2;
+      transform: scale(1.1);
+    }
+
+    section {
+      padding: 5rem 2rem;
+      position: relative;
+      z-index: 2;
+      scroll-margin-top: 80px;
+    }
+
+    #about { background-color: #000022; }
+    #gallery { background: linear-gradient(to bottom, rgba(30,0,85,0) 0%, #1e0055 30%, #1e0055 100%); }
+    #download { background: linear-gradient(to bottom, #1e0055 0%, #1e0055 70%, #000022 100%); text-align: center; }
+
+    h2 {
+      color: #8a2be2;
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: 2.8rem;
+      text-shadow: 0 0 15px #8a2be2, 0 0 30px #00f0ff;
+      animation: pulseGlow 2.5s infinite alternate;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 700px;
+      margin: 2rem auto;
+    }
+
+    ul li {
+      margin: 1rem 0;
+      font-size: 1.3rem;
+      background: rgba(138, 43, 226, 0.1);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    ul li:hover {
+      background: rgba(0, 240, 255, 0.15);
+      transform: translateX(5px);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #000;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.08) rotate(1deg);
+      box-shadow: 0 0 30px #8a2be2;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #111;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .social-links a {
+      margin: 0 12px;
+      color: #00f0ff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.3rem;
+      transition: 0.3s;
+    }
+
+    .social-links a:hover {
+      color: #8a2be2;
+      text-shadow: 0 0 12px #8a2be2;
+    }
+
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px #8a2be2, 0 0 20px #00f0ff; }
+      100% { text-shadow: 0 0 25px #8a2be2, 0 0 50px #00f0ff; }
+    }
+
+    #particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    #leaksPanel {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      right: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: transform 0.5s ease, width 0.5s ease;
+      transform: translateX(100%);
+      padding-top: 60px;
+      z-index: 20;
+      color: #f1f1f1;
+    }
+
+    #leaksPanel.open {
+      width: 400px;
+      transform: translateX(0);
+    }
+
+    @media(max-width:600px) {
+      #leaksPanel.open {
+        width: 100%;
+      }
+      header h1 { font-size: 3rem; }
+      header p { font-size: 1.2rem; }
+    }
+
+    #leaksPanel h2 {
+      text-align: center;
+      color: #00f0ff;
+      font-size: 2rem;
+      text-shadow: 0 0 12px #00f0ff, 0 0 24px #8a2be2;
+      margin-bottom: 2rem;
+    }
+
+    #leaksPanel .leaksContent {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      padding: 0 1.5rem;
+    }
+
+    #leaksPanel img, #leaksPanel video {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00f0ff;
+    }
+
+    #closeLeaks {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 3rem;
+      cursor: pointer;
+      color: #00f0ff;
+      transition: 0.3s;
+    }
+
+    #closeLeaks:hover { color: #8a2be2; text-shadow: 0 0 12px #8a2be2; }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 15;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <header>
+    <h1>SmartTaggers</h1>
+    <p>Climb, swing, and hang out in a new VR adventure.</p>
+    <a href="#download" class="cta-btn">Play Now</a>
+    <a href="privacypolicy.html" class="tab-btn" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+    <button class="tab-btn" id="leaksBtn">View Leaks</button>
+  </header>
+
+  <div id="leaksPanel">
+    <span id="closeLeaks">&times;</span>
+    <h2>Leaks</h2>
+    <div class="leaksContent" id="leaksContent"></div>
+  </div>
+
+  <div id="overlay"></div>
+
+  <section id="about">
+    <h2>About the Game</h2>
+    <p>Step into a world built for fun, freedom, and community! In <strong>SmartTaggers</strong>, you’ll swing, climb, and explore across unique environments...</p>
+    <ul>
+      <li>🏞️ Expansive maps to climb, swing, and explore</li>
+      <li>🛍️ Shops with unlockable cosmetics and collectibles</li>
+      <li>🎨 Fan Art and creative community spaces</li>
+      <li>🖤 Chill Room for hanging out and making friends</li>
+      <li>🏆 Future content and events, always something new coming soon</li>
+    </ul>
+  </section>
+
+  <section id="gallery">
+    <h2>Screenshots</h2>
+    <div class="gallery" id="screenshot-gallery"></div>
+  </section>
+
+  <section id="download">
+    <h2>Get the Game</h2>
+    <p><a href="YOUR_META_STORE_LINK" class="cta-btn">Download on Meta Store</a></p>
+  </section>
+
+  <footer>
+    <p>© 2025 SmartTaggers</p>
+    <div class="social-links">
+      <a href="https://discord.gg/YOUR_LINK">Discord</a>
+      <a href="https://www.tiktok.com/@YOUR_TIKTOK">TikTok</a>
+    </div>
+  </footer>
+
+  <script>
+    const gallery = document.getElementById("screenshot-gallery");
+    const totalScreenshots = 10;
+    for (let i = 1; i <= totalScreenshots; i++) {
+      const img = document.createElement("img");
+      img.src = `screenshot${i}.png`;
+      img.alt = `Screenshot ${i}`;
+      img.onerror = () => img.remove();
+      gallery.appendChild(img);
+    }
+
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    for (let i = 0; i < 150; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        speed: Math.random() * 1.2 + 0.3,
+        opacity: Math.random() * 0.8 + 0.2,
+        fade: Math.random() * 0.015 + 0.005,
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 240, 255, ${p.opacity})`;
+        ctx.fill();
+        p.y += p.speed;
+        if (p.y > canvas.height) p.y = 0;
+        p.opacity += p.fade * (Math.random() > 0.5 ? 1 : -1);
+        p.opacity = Math.max(0.2, Math.min(1, p.opacity));
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    const leaksBtn = document.getElementById('leaksBtn');
+    const leaksPanel = document.getElementById('leaksPanel');
+    const closeLeaks = document.getElementById('closeLeaks');
+    const leaksContent = document.getElementById('leaksContent');
+    const overlay = document.getElementById('overlay');
+
+    let leaks = [];
+
+    function updateLeaks() {
+      leaksContent.innerHTML = '';
+      if (leaks.length === 0) {
+        const message = document.createElement('p');
+        message.textContent = 'We are still working!';
+        message.style.textAlign = 'center';
+        message.style.fontSize = '1.5rem';
+        message.style.color = '#00f0ff';
+        message.style.marginTop = '2rem';
+        leaksContent.appendChild(message);
+      } else {
+        leaks.forEach(item => {
+          let el;
+          if(item.type === 'image'){
+            el = document.createElement('img');
+            el.src = item.src;
+          } else if(item.type === 'video'){
+            el = document.createElement('video');
+            el.src = item.src;
+            el.controls = true;
+          }
+          leaksContent.appendChild(el);
+        });
+      }
+    }
+
+    updateLeaks();
+
+    leaksBtn.addEventListener('click', () => {
+      leaksPanel.classList.add('open');
+      overlay.style.display = 'block';
+    });
+
+    function closeLeaksPanel() {
+      leaksPanel.classList.remove('open');
+      overlay.style.display = 'none';
+    }
+
+    closeLeaks.addEventListener('click', closeLeaksPanel);
+    overlay.addEventListener('click', closeLeaksPanel);
+  </script>
+</body>
+</html>
